@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore') #경고 무시용
 
 import sys
-sys.path.append('/home/agens/conda_user/scene/aivg/streamlit/pages')
+sys.path.append('/app/streamlit_scenegraph/pages/')
 from utils.scene_graph import *
 
 st.set_page_config(layout="wide")
@@ -32,7 +32,7 @@ st.markdown("""
 }
 """, unsafe_allow_html=True)
 
-with open(file='/home/agens/conda_user/scene/aivg/streamlit/data/tbl_scene.pkl', mode='rb') as f:
+with open(file = '/app/streamlit_scenegraph/data/tbl_scene.pkl', mode='rb') as f:
     tbl_scene=pkl.load(f)
 
 def get_spo(Subject, Predicate, Object):
@@ -40,14 +40,6 @@ def get_spo(Subject, Predicate, Object):
     img_lst=list(tbl_scene.loc[condition]['image_id'].values)
     groups=tbl_scene.loc[tbl_scene['image_id'].isin(img_lst)].groupby('image_id')            
     return  dict(list(groups))
-
-def get_spo_q2(Subject1, Subject2, Predicate1, Predicate2, Object1, Object2):
-    condition1 = ((tbl_scene.subject == Subject1)&(tbl_scene.predicate == Predicate1)&(tbl_scene.object == Object1))
-    condition2 = ((tbl_scene.subject == Subject2)&(tbl_scene.predicate == Predicate2)&(tbl_scene.object == Object2))
-    img_lst=list(tbl_scene.loc[condition1].loc[condition2]['image_id'].values)
-    groups=tbl_scene.loc[tbl_scene['image_id'].isin(img_lst)].groupby('image_id')            
-    return dict(list(groups))
-
 
 def image_resize(image_file,width=200,height=300):
     image=Image.open(image_file)
